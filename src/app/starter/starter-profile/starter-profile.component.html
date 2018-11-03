@@ -1,0 +1,148 @@
+<div class="content-wrapper" style="height:700px;">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Dashboard
+        <small>Profile</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Profile</a></li>
+        <li class="active">Dashboard</li>
+      </ol>
+    </section>
+  
+    <!-- Main content -->
+    <section class="content">
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Profile</h3>    
+                <!-- <a style="float: right;" class="btn btn-success btn-sm" (click)="addGroup()">Add</a>                                 -->
+            </div><!-- /.box-header -->
+           
+            <div class="box-body">
+                
+                <div class="container">
+                  
+                    <h2>Edit Profile</h2>
+                    <hr>
+                 
+                  <div class="row">
+                      <!-- left column -->
+                     
+                      <div class="col-md-3">
+                        <div class="text-center">
+                          <img src="//placehold.it/100" class="avatar img-circle" alt="avatar">
+                          <h6>Upload a different photo...</h6>
+                          
+                          <input type="file" class="form-control">
+                        </div>
+                      </div>
+                    
+                      <!-- edit form column -->
+                      <div class="col-md-9 personal-info">
+                        <div *ngIf="matchPassword" class="alert alert-info alert-dismissable">
+                          <a class="panel-close close" data-dismiss="alert">×</a> 
+                          <i class="fa fa-coffee"></i>
+                         {{matchPassword}}
+                        </div>
+                         <h3>Personal info</h3>
+                        
+                         <form  [formGroup]="rForm" (ngSubmit)="onClickSubmit(rForm.value)" class="form-horizontal">
+                          <div class="form-group">
+                            <label class="col-lg-3 control-label">First name:</label>
+                            <div class="col-lg-8">
+                              <input [ngModel]="firstname" class="form-control" formControlName="firstname" type="text">
+                              <div  *ngIf="!rForm.controls['firstname'].valid && rForm.controls['firstname'].touched">{{ titleAlert }}</div>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-lg-3 control-label">Last name:</label>
+                            <div class="col-lg-8">
+                              <input [ngModel]="lastname" class="form-control" type="text" formControlName="lastname">
+                              <div  *ngIf="!rForm.controls['lastname'].valid && rForm.controls['lastname'].touched">{{ titleAlert }}</div>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-lg-3 control-label">Email:</label>
+                            <div class="col-lg-8">
+                              <input [ngModel]="email" class="form-control" type="text" formControlName="email">
+                              <div  *ngIf="!rForm.controls['email'].valid && rForm.controls['email'].touched">{{ titleAlert }}</div>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label class="col-md-3 control-label">Username:</label>
+                            <div class="col-md-8">
+                              <input [ngModel]="username" class="form-control" type="text" formControlName="username">
+                              <div  *ngIf="!rForm.controls['username'].valid && rForm.controls['username'].touched">{{ titleAlert }}</div>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                              <label class="col-md-3 control-label">City:</label>
+                              <div class="col-md-8">
+                                <input [ngModel]="city" class="form-control" type="text" formControlName="city">
+                                <div *ngIf="!rForm.controls['city'].valid && rForm.controls['city'].touched">{{ titleAlert }}</div>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <label class="col-md-3 control-label">State:</label>
+                              <div class="col-md-8">
+                                <input [ngModel]="state" class="form-control" type="text" formControlName="state">
+                                <div *ngIf="!rForm.controls['state'].valid && rForm.controls['state'].touched">{{ titleAlert }}</div>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                                <label class="col-md-3 control-label">Address:</label>
+                                <div class="col-md-8">
+                                  <input [ngModel]="address" class="form-control" type="text" formControlName="address">
+                                  <div *ngIf="!rForm.controls['address'].valid && rForm.controls['address'].touched">{{ titleAlert }}</div>
+                                </div>
+                          </div>
+                          <h3 class="personal-info">For Password Update</h3>
+                          <hr>
+                          <div class="form-group">
+                            <label class="col-md-3 control-label">Password:</label>
+                            <div class="col-md-8">
+                              <input type="hidden" formControlName="opassword" [ngModel]="opassword">
+                              <input  class="form-control" type="password" formControlName="password">
+                              <div *ngIf="!rForm.controls['password'].valid && rForm.controls['password'].touched">{{ titleAlert }}</div>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-md-3 control-label">Confirm password:</label>
+                            <div class="col-md-8">
+                              <input class="form-control" type="password" formControlName="cpassword">
+                              <input type="hidden" formControlName="personId" [ngModel]="personId">
+                              <input type="hidden" formControlName="profile_pic" [ngModel]="profile_pic">
+                              <input type="hidden" formControlName="active" [ngModel]="active">
+                              <input type="hidden" formControlName="created_date" [ngModel]="created_date">
+                              <input type="hidden" formControlName="user_type" [ngModel]="user_type">
+                            </div>
+                          </div>
+                          
+                          <div class="form-group">
+                            <label class="col-md-3 control-label"></label>
+                            <div class="col-md-8">
+                                <input type="submit" [disabled] = "!rForm.valid" class="btn btn-primary" value="Save Changes">
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+          
+              
+                  </div>
+               
+                </div>
+       
+            </div><!-- /.box-body -->
+        </div>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>

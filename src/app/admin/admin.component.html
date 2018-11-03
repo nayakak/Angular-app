@@ -1,0 +1,17 @@
+<div class="wrapper">
+
+  <app-admin-header></app-admin-header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <app-admin-left-side></app-admin-left-side>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div [@routerAnimation]="getRouteAnimation(route)">
+    <router-outlet #route="outlet"></router-outlet>
+  </div>
+  <!-- /.content-wrapper -->
+  <app-admin-footer></app-admin-footer>
+
+  <!-- Control Sidebar -->
+  <app-admin-control-sidebar></app-admin-control-sidebar>
+  <!-- /.control-sidebar -->
+</div>

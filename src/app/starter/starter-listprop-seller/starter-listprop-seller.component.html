@@ -1,0 +1,293 @@
+<div class="content-wrapper" style="height:700px;">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Dashboard
+        <small>Property</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Property</a></li>
+        <li class="active">Dashboard</li>
+      </ol>
+    </section>
+  
+    <!-- Main content -->
+    <section class="content">
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box">
+            <div class="box-header">
+                <h3 *ngIf="user_arr.length != 0" class="box-title">Seller Name : {{fullname}}</h3>    
+                <a style="float: right;" class="btn btn-success btn-sm" (click)="showAddForm();">Add</a>                                
+            </div><!-- /.box-header -->
+           
+            <div class="box-body ">
+                <div class="box-body table-responsive" style="position:relative">
+                    <div *ngIf="block" class="gif_load"><img  src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                    </div>
+                    <div *ngIf="respMsg">{{respMsg}}</div>
+                    <table class="table table-bordered table-hover agent-table" id="table-list">
+                        <thead>
+                        <tr>
+                          <th>Property Unique Id</th>
+                          <th>Type</th>
+                          <th>Country</th>
+                          <th>Reserved Price ($)</th>
+                          <th>Created Date</th>
+                          <th>Action</th> 
+                        </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let person of properties">
+                            <td>{{ person.titleId }}</td>
+                            <td>{{ person.proptype }}</td>
+                            <td>{{ person.country }}</td>
+                            <td>{{ person.reservePrice }}</td>
+                            <td>{{ person.created_date}}</td> 
+                            <td>
+                                <div><a (click)="deleteproperty(person)"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                    <a (click)="openOffer(person)" data-toggle="modal" data-target="#offer"><i class="fa fa-list" aria-hidden="true"></i></a>
+                                </div>
+                                
+                                
+                            </td> 
+                          </tr>
+                        </tbody>
+                      </table>
+                     
+                      <div class="modal fade" id="offer" role="dialog">
+                        <div class="modal-dialog">
+                        
+                          <!-- Modal content-->
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                              <h4 class="modal-title">Offers For Property</h4>
+                            </div>
+                            <div class="modal-body">
+                                <table style="border:2px solid;width:540px" id="offer-bid">
+                                    <tr id="main-tr">
+                                        <th style='padding-right: 19px;padding-left: 12px;'>Buyer ID</th>
+                                        <th style='padding-right: 19px;padding-left: 12px;'>Buyer Name</th>
+                                        <th style='padding-right: 19px;padding-left: 12px;'>Bid Price ($)</th>
+                                    </tr>
+                                    <tbody id="tr_cont"></tbody>
+                                    </table>
+                                    <div id="nobiddata"></div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                          
+                        </div>
+                      </div>
+
+                      <div id="add-container" style="display: none;">
+                          <div class="container">
+                              <div class="row">
+                                    <div  *ngIf="response_msg != ''" class="alert alert-success">
+                                            <strong>Success!</strong> {{response_msg}}
+                                          </div>
+                                
+                                <form *ngIf="formfalse" [formGroup]="myForm" (ngSubmit)="onClickSubmit(myForm.value)">
+                                    <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4">
+                                      <input type="hidden"  [ngModel]="uniqueId" formControlName="uniqueId">
+                                      <input type="hidden" [ngModel]="userId" formControlName="userId">
+                                        <label for="property_type">Property Type</label>
+                                        <select id="property_type" [ngModel]="proptype" formControlName="proptype" class="form-control" >
+                                            <option value="Select property type" *ngIf="proptype == 'Select property type'; else selectBlock" selected >Select property type</option>
+                                            <ng-template #selectBlock><option value="Select property type">Select property type</option></ng-template>
+                                            <option value="House For Sale" *ngIf="proptype == 'House For Sale'; else selectHouse" selected>House For Sale</option>
+                                            <ng-template #selectHouse><option value="House For Sale">House For Sale</option></ng-template>
+                                            <option value="Apartment For Sale" *ngIf="proptype == 'Apartment For Sale'; else selectApartment" selected>Apartment For Sale</option>
+                                            <ng-template #selectApartment><option value="Apartment For Sale" >Apartment For Sale</option></ng-template>
+                                            <option value="Duplex For Sale" *ngIf="proptype == 'Duplex For Sale'; else selectDuplex" selected>Duplex For Sale</option>
+                                            <ng-template #selectDuplex><option value="Duplex For Sale">Duplex For Sale</option></ng-template>
+                                            <option value="Bungalow For Sale" *ngIf="proptype == 'Bungalow For Sale'; else selectBungalow" selected>Bungalow For Sale</option>
+                                            <ng-template #selectBungalow><option value="Bungalow For Sale">Bungalow For Sale</option></ng-template>
+                                            <option value="Site For Sale" *ngIf="proptype == 'Site For Sale'; else selectSite" selected>Site For Sale</option>
+                                            <ng-template #selectSite><option value="Site For Sale">Site For Sale</option></ng-template>
+                                            <option value="Studio Apartment For Sale" *ngIf="proptype == 'Studio Apartment For Sale'; else selectStudio">Studio Apartment For Sale</option>
+                                            <ng-template #selectStudio><option value="Studio Apartment For Sale">Studio Apartment For Sale</option></ng-template>
+                                        </select>
+                                        <div  *ngIf="!myForm.controls['proptype'].valid && myForm.controls['proptype'].touched">{{ titleAlert }}</div>
+                                    </div>
+                                    <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4">
+                                        <label for="area">Town/Area</label>
+                                        <input type="text" [ngModel]="area" formControlName="area" class="form-control" id="area" placeholder="Enter Area">
+                                        <div  *ngIf="!myForm.controls['area'].valid && myForm.controls['area'].touched">{{ titleAlert }}</div>
+                                      </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4">
+                                        <label for="postcode">Post Code</label>
+                                        <input type="text" [ngModel]="postcode" formControlName="postcode" class="form-control" id="postcode" placeholder="Post Code">
+                                        <div  *ngIf="!myForm.controls['area'].valid && myForm.controls['area'].touched">{{ titleAlert }}</div>
+                                    </div>
+                                    <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4">
+                                        <label for="fm_selling_type">Sale Type</label>
+                                      
+                                        <select id="fm_selling_type"class="form-control"  #t (change)="changeType(t.value)" [ngModel]="saletype" formControlName="saletype" >
+                                          <!--  <option value="private-treaty" *ngIf="saletype == 'private-treaty'; else private_treaty">For Sale by Private Treaty</option>-->
+                                           <!-- <ng-template #private_treaty><option value="private-treaty">For Sale by Private Treaty</option></ng-template>-->
+                                            <option value="auction" *ngIf="saletype == 'auction'; else auction">For Sale by Public Auction</option>
+                                            <ng-template #auction><option value="auction">For Sale by Public Auction</option></ng-template>
+                                           <!-- <option value="tender" *ngIf="saletype == 'tender'; else tender">For Sale by Public Tender</option>
+                                            <ng-template #tender><option value="tender">For Sale by Public Tender</option></ng-template> -->
+                                        </select>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4">
+                                        <label for="postcode">Street Address</label>
+                                        <input type="text" [ngModel]="streetaddress" (focusout)="checkaddress(inputaddr.value)" formControlName="streetaddress" class="form-control" id="streetaddress" placeholder="streetaddress" #inputaddr>
+                                        <div  *ngIf="!myForm.controls['streetaddress'].valid && myForm.controls['streetaddress'].touched">{{ titleAlert }}</div>
+                                        <span style="color:red" id="exist-addr"></span>
+                                    </div>
+                                    <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4">
+                                            <label for="postcode">Ercode</label>
+                                            <input type="text" [ngModel]="eircode" formControlName="eircode" class="form-control" id="eircode" placeholder="eircode">
+                                            <div  *ngIf="!myForm.controls['streetaddress'].valid && myForm.controls['streetaddress'].touched">{{ titleAlert }}</div>
+                                        </div>
+                                       
+                            
+
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4">
+                                            <label for="price">Country</label>
+                                            <input type="text" id="country" placeholder="country" class="form-control" [ngModel]="country" formControlName="country" >
+                                            <div  *ngIf="!myForm.controls['country'].valid && myForm.controls['country'].touched">{{ titleAlert }}</div>
+                                        </div>
+
+                                    <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4">
+                                        <label for="price">Price</label>
+                                        <input type="text" id="price" placeholder="Price" class="form-control" [ngModel]="reservePrice" formControlName="reservePrice" >
+                                        <div  *ngIf="!myForm.controls['reservePrice'].valid && myForm.controls['reservePrice'].touched">{{ titleAlert }}</div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-xs-10 col-sm-10 col-md-4 col-lg-4 tender-section">
+                                        <label for="tender-date">Tender Date</label>
+                                        <input type="text" id="tender-date" placeholder="Tender Date" class="form-control" [ngModel]="tender_date" formControlName="tender_date">
+                                        <div  *ngIf="!myForm.controls['tender_date'].valid && myForm.controls['tender_date'].touched">{{ titleAlert }}</div>
+                                     </div>
+                                    <div class="form-group col-xs-10 col-sm-10 col-md-4 col-lg-4 auction-section">
+                                       <label for="auction-date">Auction Date</label>
+                                       <input type="text" id="auction-date" placeholder="Auction Date" class="form-control" [ngModel]="auctionDate" formControlName="auctionDate">
+                                       <div  *ngIf="!myForm.controls['auctionDate'].valid && myForm.controls['auctionDate'].touched">{{ titleAlert }}</div>
+                                    </div>
+                                   
+                                    <div class="form-group col-xs-10 col-sm-10 col-md-4 col-lg-4 auction-section" >
+                                       <label for="auction-time">Auction Time</label>
+                                       <input type="text" id="auction-time" placeholder="Auction Time" class="form-control" [ngModel]="auctionTime" formControlName="auctionTime">
+                                       <div  *ngIf="!myForm.controls['auctionTime'].valid && myForm.controls['auctionTime'].touched">{{ titleAlert }}</div>
+                                    </div>                                    
+                                     <div class="clearfix"></div>
+                                    <div class="form-group col-xs-10 col-sm-10 col-md-4 col-lg-4">
+                                       <label for="num-bedrooms">Number of Bedrooms</label>
+                                       <input type="number" id="num-bedrooms" placeholder="Number of Bedrooms" class="form-control" [ngModel]="bedrooms" formControlName="bedrooms">
+                                       <div  *ngIf="!myForm.controls['bedrooms'].valid && myForm.controls['bedrooms'].touched">{{ titleAlert }}</div>
+                                    </div>
+                                    
+                                    <div class="form-group col-xs-10 col-sm-10 col-md-4 col-lg-4">
+                                       <label for="num-bathrooms">Number of Bathrooms</label>
+                                       <input type="number" id="num-bathrooms" placeholder="Number of Bathrooms" class="form-control" [ngModel]="bathroom" formControlName="bathroom">
+                                       <div  *ngIf="!myForm.controls['bathroom'].valid && myForm.controls['bathroom'].touched">{{ titleAlert }}</div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-xs-10 col-sm-10 col-md-4 col-lg-4">
+                                        <div class="col-sm-3" style="padding-left: 0px;">
+                                        <label for="d-width">Dimensions</label>
+                                        </div>
+                                        <div class="col-sm-4">
+                                        <input type="text" id="d-width" class="form-control" placeholder="Sq. Feet" [ngModel]="overallFloorlength" formControlName="overallFloorlength">
+                                        
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <input type="text" id="d-height" class="form-control" placeholder="Sq. Mtr" [ngModel]="overallFloorwidth" formControlName="overallFloorwidth">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-10 col-sm-10 col-md-4 col-lg-4">
+                                        <label for="fm_tax_section">Tax Designation (optional):</label>
+                                        <select  id="fm_tax_section" [ngModel]="tax" formControlName="tax">
+                                            <option value="tax_free" class="form-control" *ngIf="tax == 'select'; else select" selected>Not a tax based property</option>
+                                            <ng-template #select><option value="tax_free">Not a tax based property</option></ng-template>
+                                            <option value="section_23" *ngIf="tax == 'section_23'; else section_23" selected>Section 23</option>
+                                            <ng-template #section_23><option value="section_23">Section 23</option></ng-template>
+                                            <option value="section_27" *ngIf="tax == 'section_27'; else section_27" selected>Section 27</option>
+                                            <ng-template #section_27><option value="section_27">Section 27</option></ng-template>
+                                            <option value="section_50" *ngIf="tax == 'section_27'; else section_50" selected>Section 50</option>
+                                            <ng-template #section_50><option value="section_50">Section 50</option></ng-template>
+                                            <option value="Holiday_home" *ngIf="tax == 'Holiday_home'; else Holiday_home" selected>Holiday Home</option>
+                                            <ng-template #Holiday_home><option value="Holiday_home">Holiday Home</option></ng-template>
+                                            <option value="section_48" *ngIf="tax == 'section_48'; else section_48" selected>Section 48</option>  
+                                            <ng-template #section_48><option value="section_48">Section 48</option></ng-template>              
+                                          </select>
+                                     </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-xs-10 col-sm-10 col-md-8 col-lg-8">
+                                        <label>Facilities:</label>
+                                        <div class="row">
+                                            
+                                          <div class="col-sm-4">
+                                              <label class="container_check" *ngFor="let role of facilities;">{{role}}
+                                                  <input type="checkbox" [ngModel]="facilities" formControlName="facilities">
+                                                  <span class="checkmark"></span>
+                                              </label>
+                                          </div>
+                                    
+                                    </div>
+                                    </div>
+                                    <div class="hide form-group col-xs-10 col-sm-8 col-md-10 col-lg-8">
+                                        <label>Features (optional):</label>
+                                        <div class="col-md-12 col-lg-12">
+                                          <table style="width: 100%;">
+                                            <tr>
+                                              <td>1.</td>
+                                              <td><input type="text" class="form-control"></td>
+                                            </tr>
+                                            <tr>
+                                              <td>2.</td>
+                                              <td><input type="text" class="form-control"></td>
+                                            </tr>
+                                            <tr>
+                                              <td>3.</td>
+                                              <td><input type="text" class="form-control"></td>
+                                            </tr>
+                                            <tr>
+                                              <td>4.</td>
+                                              <td><input type="text" class="form-control"></td>
+                                            </tr>
+                                            <tr>
+                                              <td>5.</td>
+                                              <td><input type="text" class="form-control"></td>
+                                            </tr>
+                                          </table>
+                                        </div>
+                                    </div> 
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-xs-10 col-sm-10 col-md-8 col-lg-8">
+                                        <label for="tender-date">Information</label>
+                                        <textarea [ngModel]="information" formControlName="information" name="info" id="info" class="form-control" rows="10" ></textarea>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-xs-10 col-sm-8 col-md-8 col-lg-8">
+                                        <button style="float: right;" type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
+                                <div class="clearfix"></div>
+                            
+                                <br /><br />
+                              </div>
+                            </div>
+                      </div>
+                  </div>
+            </div><!-- /.box-body -->
+        </div>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
+ 

@@ -1,0 +1,90 @@
+<div class="content-wrapper" style="height:700px;">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Dashboard
+      <small>Users</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i>Users</a></li>
+      <li class="active">Dashboard</li>
+    </ol>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+      <div class="col-md-12">
+        <!-- Custom Tabs -->
+        <div class="nav-tabs-custom">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab_1" data-toggle="tab">Newly Register Users</a></li>
+            <li><a href="#tab_2" data-toggle="tab">Buyers</a></li>
+          </ul>
+          <div class="tab-content">
+            <div *ngIf="resp" class="alert alert-success">Done</div>
+            <div class="tab-pane active" id="tab_1">
+              <table class="table table-bordered table-hover user-table">
+                <thead>
+                <tr>
+                  <th>UserName</th>
+                  <th>FirstName</th>
+                  <th>LastName</th>
+                  <th>Verify</th>
+                  <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let person of registerUsers">
+                    <td>{{ person.username }}</td>
+                    <td>{{ person.first_name }}</td>
+                    <td>{{ person.last_name }}</td>
+                    <td><i  *ngIf="person?.is_authenticated == 1" class="fa fa-check"></i> <i  *ngIf="person?.is_authenticated == 0" class="fa fa-close"></i></td> 
+                    <td>
+                        <div *ngIf="person?.is_authenticated == 0; else elseBlock">Not Verified</div>
+                        <ng-template #elseBlock><a *ngIf="anc"  (click)="sendHyperLedger(person)"><i class="fa fa-paper-plane" aria-hidden="true"></i></a></ng-template>
+                       </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.tab-pane -->
+            <div class="tab-pane" id="tab_2">
+                <div *ngIf="block" class="alert alert-success">Successfuly Blocked</div>
+                <div *ngIf="unblock" class="alert alert-success">Successfuly UnBlocked</div>
+              <table class="table table-bordered table-hover user-table">
+                <thead>
+                <tr>
+                  <th>UserName</th>
+                  <th>FirstName</th>
+                  <th>LastName</th>
+                  <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let person of HyperUsers">
+                    <td>{{ person.userName }}</td>
+                    <td>{{ person.firstName }}</td>
+                    <td>{{ person.lastName }}</td>
+                    <td> 
+                      <div *ngIf="person?.active == true; else elseBlock"><a (click)="blockUser(person)"><i class="fa fa-ban" aria-hidden="true"></i></a></div>
+                      <ng-template #elseBlock><a  (click)="unblockUser(person)"><i class="fa fa-check" aria-hidden="true"></i></a></ng-template>
+                    </td> 
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- /.tab-pane -->
+          </div>
+          <!-- /.tab-content -->
+        </div>
+        <!-- nav-tabs-custom -->
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  </section>
+  <!-- /.content -->
+</div>
